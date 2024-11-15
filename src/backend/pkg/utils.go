@@ -87,6 +87,20 @@ func personal_qualities(tenth_house int, sixth_house int) int{
 	return house6[sixth_house-1]+house10[tenth_house]
 }
 
+func tarot_coefficient(date[3]int){
+	number:=0
+	for i:=0; i<3;i++{
+		for date[i]>0{
+			number+=date[i]%10
+			date[i]/=10
+		}
+	}
+	number%=22
+	arcana_priority:=[22]int{
+		1,7,3,6,5,4,5,7,8,3,9,10,5,4,7,7,3,9,6,10,7,7,
+	}
+}
+
 func main(){//date_of_birth string, 10th_house int, 6th_house int) {
 	
 	var date_of_birth string
@@ -103,5 +117,5 @@ func main(){//date_of_birth string, 10th_house int, 6th_house int) {
 	}
 	nomber_z_s:=zodiacSign(dateArray[0],dateArray[1])
 	fmt.Print(nomber_z_s)
-	
+
 }
