@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@font-face {
+  font-family: 'Mont Blanc';
+  src: url('./assets/fonts/MontBlanc-Trial-Regular.woff2') format('woff2'),
+  url('./assets/fonts/MontBlanc-Trial-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Mont Blanc';
+  src: url('./assets/fonts/MontBlanc-Trial-Bold.woff2') format('woff2'),
+  url('./assets/fonts/MontBlanc-Trial-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+}
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+input:focus {
+  outline: none; /* Убирает стандартный outline */
+  box-shadow: 0 0 0 2px rgba(14, 102, 102, 0.6); /* Применяет ваш собственный цвет */
+  border-color: #0E6666; /* Применяет нужный цвет для фокуса */
+}
+
