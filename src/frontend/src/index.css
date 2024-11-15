@@ -35,3 +35,82 @@ input:focus {
   border-color: #0E6666; /* Применяет нужный цвет для фокуса */
 }
 
+/* Стили для поля ввода */
+.react-datepicker__input-container input {
+  border: 1px solid #ccc;
+  padding: 8px;
+  font-size: 14px;
+  color: #333;
+  border-radius: 4px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.react-datepicker__input-container input:focus {
+  border-color: #0E6666;
+  background-color: #fafafa;
+  box-shadow: 0 0 5px rgba(14, 102, 102, 0.5); /* Тень при фокусе */
+}
+
+/* Стили для выбранного дня */
+.react-datepicker__day--selected {
+  background-color: #0E6666; /* Акцентный цвет для выбранного дня */
+  color: white;
+}
+
+/* Стили для дня при наведении */
+.react-datepicker__day:hover {
+  background-color: #083939; /* Цвет для дня при наведении */
+  color: white;
+}
+
+
+/* Сброс стандартных стилей браузера */
+input[type="date"] {
+  -webkit-appearance: none; /* Убирает стандартный стиль в Safari */
+  -moz-appearance: none;    /* Убирает стандартный стиль в Firefox */
+  appearance: none;         /* Убирает стандартный стиль в других браузерах */
+  background: transparent;  /* Убирает фон календаря */
+  border: 1px solid #ccc;   /* Устанавливает собственную рамку */
+  border-radius: 5px;       /* Сглаживает углы */
+  font-size: 14px;          /* Устанавливает размер шрифта */
+  color: #333;              /* Устанавливает цвет текста */
+  padding: 10px;            /* Добавляет отступы для текста */
+  width: 100%;              /* Ширина поля ввода на всю доступную ширину */
+  box-sizing: border-box;   /* Учитывает padding в размере элемента */
+}
+
+
+
+/* Фокус на поле ввода даты */
+input[type="date"]:focus {
+  outline: none;              /* Убирает стандартное обводку браузера */
+  border-color: #0e6666;      /* Устанавливает цвет рамки при фокусе */
+  background-color: #fff;     /* Изменяет цвет фона при фокусе */
+}
+
+/* Стиль текста в поле ввода */
+input[type="date"]:not(:focus) {
+  background-color: #f7f7f7;  /* Фон по умолчанию */
+  color: #333;                /* Цвет текста по умолчанию */
+}
+
+/* Стилизация поля ввода даты */
+input[type="date"] {
+  appearance: none; /* Убирает стандартный стиль браузера */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f7f7f7;
+  color: #333;
+}
+
+/* Фокус на поле ввода даты */
+input[type="date"]:focus {
+  border-color: #0e6666;
+  outline: none;
+  background-color: #fff;
+}
