@@ -4,18 +4,24 @@ import { useNavigate } from "react-router-dom"; // Импортируем хук
 // Определение типа для состояния формы
 interface RegisterForm {
     name: string;
+    username: string; // Имя пользователя - обязательное поле
     email: string;
     password: string;
     confirmPassword: string;
+    birthDate: string; // Дата рождения - обязательное поле
+    birthTime?: string; // Время рождения - необязательное поле
 }
 
 // Основной компонент страницы регистрации
 const RegisterPage: React.FC = () => {
     const [formData, setFormData] = useState<RegisterForm>({
         name: "",
+        username: "",
         email: "",
         password: "",
         confirmPassword: "",
+        birthDate: "",
+        birthTime: "",
     });
     const [error, setError] = useState<string>("");
     const [success, setSuccess] = useState<string>("");
@@ -32,9 +38,16 @@ const RegisterPage: React.FC = () => {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Проверка на заполненность полей
-        if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
-            setError("Пожалуйста, заполните все поля.");
+        // Проверка на заполненность обязательных полей
+        if (
+            !formData.name ||
+            !formData.username ||
+            !formData.email ||
+            !formData.password ||
+            !formData.confirmPassword ||
+            !formData.birthDate
+        ) {
+            setError("Пожалуйста, заполните все обязательные поля.");
             setSuccess("");
             return;
         }
@@ -75,6 +88,7 @@ const RegisterPage: React.FC = () => {
                 )}
 
                 <form onSubmit={handleSubmit}>
+                    {/* Поле "Имя" */}
                     <div className="mb-4">
                         <label htmlFor="name" className="block text-sm font-medium text-gray-700">
                             Имя
@@ -91,6 +105,24 @@ const RegisterPage: React.FC = () => {
                         />
                     </div>
 
+                    {/* Поле "Имя пользователя" */}
+                    <div className="mb-4">
+                        <label htmlFor="username" className="block text-sm font-medium text-gray-700">
+                            Имя пользователя
+                        </label>
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            value={formData.username}
+                            onChange={handleChange}
+                            className="mt-1 p-2 w-full border border-gray-300 rounded-md focus:ring-[#0E6666] focus:border-[#0E6666]"
+                            placeholder="Введите имя пользователя"
+                            required
+                        />
+                    </div>
+
+                    {/* Поле "Email" */}
                     <div className="mb-4">
                         <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                             Email
@@ -107,6 +139,7 @@ const RegisterPage: React.FC = () => {
                         />
                     </div>
 
+                    {/* Поле "Пароль" */}
                     <div className="mb-4">
                         <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                             Пароль
@@ -123,6 +156,7 @@ const RegisterPage: React.FC = () => {
                         />
                     </div>
 
+                    {/* Поле "Подтверждение пароля" */}
                     <div className="mb-6">
                         <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
                             Подтверждение пароля
@@ -139,6 +173,38 @@ const RegisterPage: React.FC = () => {
                         />
                     </div>
 
+                    {/* Поле "Дата рождения" */}
+                    <div className="mb-4">
+                        <label htmlFor="birthDate" className="block text-sm font-medium text-gray-700">
+                            Дата рождения
+                        </label>
+                        <input
+                            type="date"
+                            id="birthDate"
+                            name="birthDate"
+                            value={formData.birthDate}
+                            onChange={handleChange}
+                            className="mt-1 p-2 w-full border border-gray-300 rounded-md focus:ring-[#0E6666] focus:border-[#0E6666]"
+                            required
+                        />
+                    </div>
+
+                    {/* Поле "Время рождения" - необязательное */}
+                    <div className="mb-4">
+                        <label htmlFor="birthTime" className="block text-sm font-medium text-gray-700">
+                            Время рождения (необязательно)
+                        </label>
+                        <input
+                            type="time"
+                            id="birthTime"
+                            name="birthTime"
+                            value={formData.birthTime || ""}
+                            onChange={handleChange}
+                            className="mt-1 p-2 w-full border border-gray-300 rounded-md focus:ring-[#0E6666] focus:border-[#0E6666]"
+                        />
+                    </div>
+
+                    {/* Кнопка отправки формы */}
                     <button
                         type="submit"
                         className="w-full bg-[#F25430] hover:bg-[#E1350E] text-white font-semibold py-2 px-4 rounded-md transition duration-300"
@@ -147,6 +213,7 @@ const RegisterPage: React.FC = () => {
                     </button>
                 </form>
 
+                {/* Ссылка на страницу авторизации */}
                 <p className="mt-4 text-sm text-center text-gray-600">
                     Уже есть аккаунт?{" "}
                     <a href="/login" className="text-[#F25430] hover:underline">
