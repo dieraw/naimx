@@ -21,8 +21,7 @@ const LoginPage: React.FC = () => {
         setFormData({ ...formData, [name]: value });
     };
 
-    // Обработчик отправки формы
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         // Проверка, заполнены ли поля
@@ -31,14 +30,30 @@ const LoginPage: React.FC = () => {
             return;
         }
 
-        setError(""); // Очистка ошибки
-        console.log("Отправлено:", formData);
+        try {
+            // Отправляем данные на сервер
+            const response = await fetch("http://localhost:5000/api/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            });
 
-        // Здесь можно добавить логику отправки данных на сервер
+            const result = await response.json();
 
-        // После успешной авторизации редиректим на главную страницу или другую
-        alert("Вы успешно вошли!");
-        navigate("/home"); // Например, редиректим на /home
+            if (response.ok) {
+                console.log("Авторизация успешна:", result);
+
+                // Успешный вход — перенаправляем пользователя
+                navigate("/home"); // Например, на главную страницу
+            } else {
+                setError(result.message || "Ошибка авторизации. Проверьте введенные данные.");
+            }
+        } catch (error) {
+            console.error("Ошибка при подключении:", error);
+            setError("Не удалось подключиться к серверу. Попробуйте позже.");
+        }
     };
 
     return (

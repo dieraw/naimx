@@ -35,7 +35,7 @@ const RegisterPage: React.FC = () => {
     };
 
     // Обработчик отправки формы
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         // Проверка на заполненность обязательных полей
@@ -59,15 +59,43 @@ const RegisterPage: React.FC = () => {
             return;
         }
 
-        setError(""); // Очистка ошибки
-        setSuccess("Регистрация успешна!");
-        console.log("Отправлено:", formData);
+        try {
+            // Формирование данных для отправки
+            const requestData = {
+                name: formData.name,
+                username: formData.username,
+                email: formData.email,
+                birthDate: formData.birthDate,
+                birthTime: formData.birthTime || null, // Если поле пустое, передаем null
+            };
 
-        // Здесь можно добавить логику отправки данных на сервер
-        alert("Вы успешно зарегистрировались!");
+            // Отправка данных на сервер
+            const response = await fetch("http://localhost:5000/api/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(requestData),
+            });
 
-        // Редирект на страницу авторизации после успешной регистрации
-        navigate("/login");
+            const result = await response.json();
+
+            if (response.ok) {
+                setSuccess("Регистрация успешна!");
+                setError("");
+                console.log("Ответ сервера:", result);
+
+                // Редирект на страницу авторизации
+                navigate("/login");
+            } else {
+                setError(result.message || "Ошибка при регистрации.");
+                setSuccess("");
+            }
+        } catch (error) {
+            console.error("Ошибка при отправке данных:", error);
+            setError("Ошибка подключения к серверу.");
+            setSuccess("");
+        }
     };
 
     return (
