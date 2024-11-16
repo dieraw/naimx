@@ -1,9 +1,12 @@
 package main
 
 import (
-	"github.com/gin-contrib/cors"
+	"fmt"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
-	"net/http"
+	handlers "naimx/internal"
+	utils "naimx/pkg"
 )
 
 type UserForm struct {
@@ -16,28 +19,39 @@ type UserForm struct {
 func main() {
 	r := gin.Default()
 
-	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:3001"},
-		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
-		AllowHeaders:     []string{"Content-Type"},
-		AllowCredentials: true,
-	}))
+	secret := utils.GenerateSecret()
 
-	r.Static("/static", "./frontend/build/static")
+	store := cookie.NewStore([]byte(secret))
+	r.Use(sessions.Sessions("naimix-session", store))
 
-	r.StaticFile("/", "./frontend/build/index.html")
+	//r.Use(cors.New(cors.Config{
+	//	AllowOrigins:     []string{"http://localhost:3001", "http://localhost:8080"},
+	//	AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
+	//	AllowHeaders:     []string{"Content-Type"},
+	//	AllowCredentials: true,
+	//}))
+	//
+	//r.Static("/static", "./frontend/build/static")
+	//
+	//r.StaticFile("/", "./frontend/build/index.html")
+	//
+	//r.NoRoute(func(c *gin.Context) {
+	//	c.File("./frontend/build/index.html")
+	//})
 
-	r.NoRoute(func(c *gin.Context) {
-		c.File("./frontend/build/index.html")
-	})
+	r.POST("/api/register", handlers.Register)
+	r.POST("/api/login", handlers.Login)
 
-	r.POST("/register", func(c *gin.Context) {
-		var user UserForm
+	r.GET("/session-data", func(c *gin.Context) {
+		session := sessions.Default(c)
 
-		if err := c.ShouldBindJSON(&user); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"ok": "false", "error": err.Error()})
-			return
-		}
+		username := session.Get("username")
+		fmt.Println("Username in session:", username)
+
+		c.JSON(200, gin.H{
+			"username":  username,
+			"logged_in": session.Get("logged_in"),
+		})
 	})
 
 	r.Run(":8080")

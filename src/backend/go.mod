@@ -1,4 +1,4 @@
-module github.com/dieraw/naimx
+module naimx
 
 go 1.23.3
 
