@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
@@ -9,14 +10,9 @@ import (
 	utils "naimx/pkg"
 )
 
-type UserForm struct {
-	Name      string `json:"name" binding:"required"`
-	Email     string `json:"email" binding:"required"`
-	BirthDate string `json:"birthDate" binding:"required"`
-	BirthTime string `json:"birthTime"`
-}
-
 func main() {
+	utils.ConnectToDB()
+	utils.CreateTables()
 	r := gin.Default()
 
 	secret := utils.GenerateSecret()
@@ -24,13 +20,13 @@ func main() {
 	store := cookie.NewStore([]byte(secret))
 	r.Use(sessions.Sessions("naimix-session", store))
 
-	//r.Use(cors.New(cors.Config{
-	//	AllowOrigins:     []string{"http://localhost:3001", "http://localhost:8080"},
-	//	AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
-	//	AllowHeaders:     []string{"Content-Type"},
-	//	AllowCredentials: true,
-	//}))
-	//
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:5000", "http://localhost:3000"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
+		AllowHeaders:     []string{"Content-Type", "Authorization"},
+		AllowCredentials: true,
+	}))
+
 	//r.Static("/static", "./frontend/build/static")
 	//
 	//r.StaticFile("/", "./frontend/build/index.html")
@@ -54,5 +50,5 @@ func main() {
 		})
 	})
 
-	r.Run(":8080")
+	r.Run(":5000")
 }
