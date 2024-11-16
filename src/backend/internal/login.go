@@ -6,9 +6,21 @@ import (
 	"net/http"
 )
 
+// Login Авторизация пользователя
+// @Summary Авторизация
+// @Description Проверка email и пароля, создание сессии
+// @Tags auth
+// @Accept  json
+// @Produce  json
+// @Param login body struct{Email string `json:"email"`; Password string `json:"password"`} true "Данные для входа"
+// @Success 200 {object} map[string]interface{} "Успешный вход"
+// @Failure 400 {object} map[string]interface{} "Неверный запрос"
+// @Failure 401 {object} map[string]interface{} "Неверные учетные данные"
+// @Router /api/login [post]
+
 func Login(c *gin.Context) {
 	var loginReq struct {
-		Username string `json:"username"`
+		Email    string `json:"email"`
 		Password string `json:"password"`
 	}
 
@@ -18,10 +30,10 @@ func Login(c *gin.Context) {
 	}
 
 	// Будем получать данные с базы
-	if loginReq.Username == "admin" && loginReq.Password == "password" {
+	if loginReq.Email == "admin@com" && loginReq.Password == "password" {
 
 		session := sessions.Default(c)
-		session.Set("username", loginReq.Username)
+		session.Set("email", loginReq.Email)
 		session.Set("logged_in", true)
 
 		if err := session.Save(); err != nil {
