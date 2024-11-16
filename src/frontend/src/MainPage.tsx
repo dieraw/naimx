@@ -160,7 +160,9 @@ const HomePage: React.FC = () => {
                         <div className="w-full bg-gray-200 rounded-full h-6">
                             <div
                                 className="bg-[#0E6666] h-6 rounded-full text-white text-center text-sm"
-                                style={{ width: `${compatibilityPercentage}%` }}
+                                style={{ width: `${compatibilityPercentage}%`,
+                                    minWidth: "20px", // Минимальная ширина для отображения числа
+                                }}
                             >
                                 {compatibilityPercentage}%
                             </div>
