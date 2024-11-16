@@ -8,7 +8,6 @@ import Main from './MainPage';
 
 const App: React.FC = () => {
     return (
-        <>
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<LoginPage />} />
@@ -17,7 +16,6 @@ const App: React.FC = () => {
 
                 {/* Если захотите добавить другие страницы, можете сюда добавить */}
             </Routes>
-        </>
     );
 };
 

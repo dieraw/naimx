@@ -18,19 +18,28 @@ const HomePage: React.FC = () => {
         birthTime: "",
     });
     const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
-    const [compatibilityResult, setCompatibilityResult] = useState<string>("");
+    const [compatibilityPercentage, setCompatibilityPercentage] = useState<number | null>(null);
     const [error, setError] = useState<string>("");
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+    // Моковые пользователи
+    const mockUsers: User[] = [
+        { id: 1, name: "Анна Иванова", username: "anna123", birthDate: "1990-06-15", birthTime: "08:30" },
+        { id: 2, name: "Иван Петров", username: "ivan_petrov", birthDate: "1985-12-10", birthTime: "14:45" },
+        { id: 3, name: "Мария Сидорова", username: "masha_s", birthDate: "1992-08-20", birthTime: "10:15" },
+    ];
 
     useEffect(() => {
         const fetchUsers = async () => {
             try {
+                // Попытка загрузить пользователей с сервера
                 const response = await fetch("http://localhost:5000/api/users");
                 const data = await response.json();
                 setUsers(data);
             } catch (error) {
-                console.error("Ошибка при загрузке пользователей:", error);
-                setError("Не удалось загрузить список пользователей.");
+                console.error("Ошибка при загрузке пользователей, используем моковые данные:", error);
+                // Если ошибка, используем моковые данные
+                setUsers(mockUsers);
             }
         };
         fetchUsers();
@@ -84,37 +93,30 @@ const HomePage: React.FC = () => {
         }
     };
 
-    const handleCheckCompatibility = async () => {
+    const handleCheckCompatibility = () => {
         if (selectedUsers.length !== 2) {
             setError("Выберите двух пользователей для проверки совместимости.");
             return;
         }
 
-        try {
-            const response = await fetch("http://localhost:5000/api/compatibility", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ userIds: selectedUsers }),
-            });
-
-            const result = await response.json();
-
-            if (response.ok) {
-                setCompatibilityResult(result.message || "Совместимость не рассчитана.");
-            } else {
-                setError(result.message || "Ошибка при расчете совместимости.");
-            }
-        } catch (error) {
-            console.error("Ошибка при проверке совместимости:", error);
-            setError("Не удалось подключиться к серверу.");
-        }
+        // Генерация случайного процента для моковой проверки
+        const mockCompatibility = Math.floor(Math.random() * 101); // От 0 до 100
+        setCompatibilityPercentage(mockCompatibility);
+        setError(""); // Сброс ошибок
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100">
-            <div className="w-full max-w-3xl bg-white p-8 rounded-lg shadow-lg">
+        <div className="relative flex items-center justify-center min-h-screen overflow-hidden drop-shadow">
+            <div
+                className="absolute inset-0 z-0"
+                style={{
+                    backgroundImage: `url(${require('./img/bg4.jpg')})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                }}
+            ></div>
+
+            <div className="relative z-10 w-full max-w-3xl bg-white p-8 rounded-lg opacity-100">
                 <h1 className="text-3xl font-bold text-center mb-6">Управление пользователями</h1>
 
                 {error && (
@@ -123,7 +125,6 @@ const HomePage: React.FC = () => {
                     </div>
                 )}
 
-                {/* Кнопка для открытия модального окна */}
                 <button
                     onClick={() => setIsModalOpen(true)}
                     className="w-full bg-[#0E6666] text-white px-4 py-2 rounded-md hover:bg-[#083939] mb-6"
@@ -131,14 +132,13 @@ const HomePage: React.FC = () => {
                     Добавить пользователя
                 </button>
 
-                {/* Список пользователей */}
                 <h2 className="text-xl font-semibold mb-4 text-center">Список пользователей</h2>
                 <ul className="list-disc pl-5 mb-4">
                     {users.map((user) => (
                         <li
                             key={user.id}
                             className={`cursor-pointer ${
-                                selectedUsers.includes(user.id) ? "text-blue-500 font-bold" : ""
+                                selectedUsers.includes(user.id) ? "text-[#FF9929] font-bold" : ""
                             }`}
                             onClick={() => handleSelectUser(user.id)}
                         >
@@ -147,7 +147,6 @@ const HomePage: React.FC = () => {
                     ))}
                 </ul>
 
-                {/* Кнопка проверки совместимости */}
                 <button
                     onClick={handleCheckCompatibility}
                     className="w-full bg-[#F25430] text-white px-4 py-2 rounded-md hover:bg-[#E1350E]"
@@ -155,15 +154,20 @@ const HomePage: React.FC = () => {
                     Проверить совместимость
                 </button>
 
-                {/* Результат совместимости */}
-                {compatibilityResult && (
+                {compatibilityPercentage !== null && (
                     <div className="mt-6 p-4 bg-gray-100 border rounded-md text-center">
-                        <h3 className="text-lg font-semibold mb-2">Результат совместимости:</h3>
-                        <p>{compatibilityResult}</p>
+                        <h3 className="text-lg font-semibold mb-4">Результат совместимости:</h3>
+                        <div className="w-full bg-gray-200 rounded-full h-6">
+                            <div
+                                className="bg-[#0E6666] h-6 rounded-full text-white text-center text-sm"
+                                style={{ width: `${compatibilityPercentage}%` }}
+                            >
+                                {compatibilityPercentage}%
+                            </div>
+                        </div>
                     </div>
                 )}
 
-                {/* Модальное окно */}
                 {isModalOpen && (
                     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
                         <div className="bg-white w-full max-w-md p-6 rounded-lg shadow-lg">
