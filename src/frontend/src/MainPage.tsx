@@ -9,6 +9,11 @@ interface User {
 }
 
 const HomePage: React.FC = () => {
+    const [pageTitle, setPageTitle] = useState("Управление пользователями");
+    useEffect(() => {
+        document.title = pageTitle;
+    }, [pageTitle]); // Обновляем заголовок, если `pageTitle` изменился
+
     const [users, setUsers] = useState<User[]>([]);
     const [newUser, setNewUser] = useState<User>({
         id: 0,

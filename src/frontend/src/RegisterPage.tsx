@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom"; // Импортируем хук для навигации
 
 // Определение типа для состояния формы
@@ -14,6 +14,11 @@ interface RegisterForm {
 
 // Основной компонент страницы регистрации
 const RegisterPage: React.FC = () => {
+    const [pageTitle, setPageTitle] = useState("Регистрация");
+    useEffect(() => {
+        document.title = pageTitle;
+    }, [pageTitle]); // Обновляем заголовок, если `pageTitle` изменился
+
     const [formData, setFormData] = useState<RegisterForm>({
         name: "",
         username: "",

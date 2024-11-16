@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom"; // Импортируем хук для навигации
 
 // Определение типа для состояния формы
@@ -10,6 +10,11 @@ interface LoginForm {
 // Основной компонент страницы авторизации
 const LoginPage: React.FC = () => {
     // Хуки состояния
+    const [pageTitle, setPageTitle] = useState("Авторизация");
+    useEffect(() => {
+        document.title = pageTitle;
+    }, [pageTitle]); // Обновляем заголовок, если `pageTitle` изменился
+
     const [formData, setFormData] = useState<LoginForm>({ email: "", password: "" });
     const [error, setError] = useState<string>("");
 
