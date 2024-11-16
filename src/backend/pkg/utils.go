@@ -1,9 +1,10 @@
-package main
+package utils
 
-import(
+import (
+	"crypto/rand"
+	"encoding/base64"
 	"fmt"
 	"time"
-	//"math"
 )
 
 func zodiacSign(day, month int) int {
@@ -37,26 +38,26 @@ func zodiacSign(day, month int) int {
 	}
 }
 
-func compatibility_with_employees(sing1 int, sing2 int)int{
-	constM:=[12][12]int{
-		{-1,1,1,-1,	1,1,1,-1,1,1,1,1},
-		{1,-1,1,1,-1,-1,-1,-1,-1,1,1,-1},
-		{1,1,-1,-1,-1,-1,-1,-1,-1,-1,1,-1},
-		{-1,1,-1,-1,-1,1,-1,1,-1,1,1,1},
-		{1,-1,-1,-1,-1,1,1,1,1,-1,1,1},
-		{1,-1,-1,1,1,-1,1,-1,-1,1,1,-1},
-		{1,-1,-1,-1,1,1,-1,-1,1,-1,1,1},
-		{-1,-1,-1,1,1,-1,-1,-1,1,-1,1,1},
-		{1,-1,-1,-1,1,-1,1,1,1,-1,1,-1},
-		{1,1,-1,1,-1,1,-1,-1,-1,-1,1,1},
-		{1,1,-1,1,1,1,1,1,1,1,-1,-1},
-		{1,-1,-1,1,1,-1,1,1,-1,1,1,-1},
+func EmployeesCompatibility(sing1 int, sing2 int) int {
+	compatibilityMatrix := [12][12]int{
+		{-1, 1, 1, -1, 1, 1, 1, -1, 1, 1, 1, 1},
+		{1, -1, 1, 1, -1, -1, -1, -1, -1, 1, 1, -1},
+		{1, 1, -1, -1, -1, -1, -1, -1, -1, -1, 1, -1},
+		{-1, 1, -1, -1, -1, 1, -1, 1, -1, 1, 1, 1},
+		{1, -1, -1, -1, -1, 1, 1, 1, 1, -1, 1, 1},
+		{1, -1, -1, 1, 1, -1, 1, -1, -1, 1, 1, -1},
+		{1, -1, -1, -1, 1, 1, -1, -1, 1, -1, 1, 1},
+		{-1, -1, -1, 1, 1, -1, -1, -1, 1, -1, 1, 1},
+		{1, -1, -1, -1, 1, -1, 1, 1, 1, -1, 1, -1},
+		{1, 1, -1, 1, -1, 1, -1, -1, -1, -1, 1, 1},
+		{1, 1, -1, 1, 1, 1, 1, 1, 1, 1, -1, -1},
+		{1, -1, -1, 1, 1, -1, 1, 1, -1, 1, 1, -1},
 	}
-	return constM[sing1-1][sing2-1]
+	return compatibilityMatrix[sing1-1][sing2-1]
 }
 
-func personal_qualities(tenth_house int, sixth_house int) int{
-	house6:=[12]int{
+func personalQualities(tenthHouse int, sixthHouse int) int {
+	house6 := [12]int{
 		3,
 		6,
 		5,
@@ -70,7 +71,7 @@ func personal_qualities(tenth_house int, sixth_house int) int{
 		2,
 		10,
 	}
-	house10:=[12]int{
+	house10 := [12]int{
 		7,
 		3,
 		4,
@@ -84,11 +85,21 @@ func personal_qualities(tenth_house int, sixth_house int) int{
 		1,
 		8,
 	}
-	return house6[sixth_house-1]+house10[tenth_house]
+	return house6[sixthHouse-1] + house10[tenthHouse]
 }
 
-func main(){//date_of_birth string, 10th_house int, 6th_house int) {
-	
+func GenerateSecret() string {
+	bytes := make([]byte, 32)
+	_, err := rand.Read(bytes)
+	if err != nil {
+		fmt.Println("Error generating secret:", err)
+		return ""
+	}
+	return base64.StdEncoding.EncodeToString(bytes)
+}
+
+func main() {
+
 	var date_of_birth string
 	fmt.Scan(&date_of_birth)
 	parsedDate, err := time.Parse("02.01.2006", date_of_birth)
@@ -101,7 +112,7 @@ func main(){//date_of_birth string, 10th_house int, 6th_house int) {
 		int(parsedDate.Month()),
 		parsedDate.Year(),
 	}
-	nomber_z_s:=zodiacSign(dateArray[0],dateArray[1])
+	nomber_z_s := zodiacSign(dateArray[0], dateArray[1])
 	fmt.Print(nomber_z_s)
-	
+
 }
