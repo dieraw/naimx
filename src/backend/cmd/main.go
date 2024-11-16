@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
@@ -19,12 +20,12 @@ func main() {
 	store := cookie.NewStore([]byte(secret))
 	r.Use(sessions.Sessions("naimix-session", store))
 
-	//r.Use(cors.New(cors.Config{
-	//	AllowOrigins:     []string{"http://localhost:5000", "http://localhost:3000"},
-	//	AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
-	//	AllowHeaders:     []string{"Content-Type", "Authorization"},
-	//	AllowCredentials: true,
-	//}))
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:5000", "http://localhost:3000"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
+		AllowHeaders:     []string{"Content-Type", "Authorization"},
+		AllowCredentials: true,
+	}))
 
 	//r.Static("/static", "./frontend/build/static")
 	//
