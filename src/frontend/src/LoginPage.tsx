@@ -110,7 +110,7 @@ const LoginPage: React.FC = () => {
                 </form>
                 <p className="mt-4 text-sm text-center text-gray-600">
                     Нет аккаунта?{" "}
-                    <a href="/register" className="text-[#F25430] hover:underline">
+                    <a href="/registerHR" className="text-[#F25430] hover:underline">
                         Зарегистрироваться
                     </a>
                 </p>
